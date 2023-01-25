@@ -29,7 +29,7 @@ import mmarquee.uiautomation.IUIAutomation;
  * Wrapper for the access to Ole32, which only exists on Windows,
  * so tests can't be run on Linux, etc.
  *
- * This should allow the underlying funcionality to be Mocked, and
+ * This should allow the underlying functionality to be Mocked, and
  * allow further testing to be carried out via travis-ci (for example)
  */
 public class Ole32Wrapper {

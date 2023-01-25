@@ -48,22 +48,26 @@ public class IUIAutomationTextPatternConverter {
                 return f.invokeInt(new Object[]{interfacePointer});
             }
 
-            public int Release() {
+            @Override
+			public int Release() {
                 Function f = Function.getFunction(vTable[2], Function.ALT_CONVENTION);
                 return f.invokeInt(new Object[]{interfacePointer});
             }
 
-            public int getSelection(PointerByReference result) {
+            @Override
+			public int getSelection(PointerByReference result) {
                 Function f = Function.getFunction(vTable[5], Function.ALT_CONVENTION);
                 return f.invokeInt(new Object[]{interfacePointer, result});
             }
 
-            public int getVisibleRanges(PointerByReference ranges) {
+            @Override
+			public int getVisibleRanges(PointerByReference ranges) {
                 Function f = Function.getFunction(vTable[6], Function.ALT_CONVENTION);
                 return f.invokeInt(new Object[]{interfacePointer, ranges});
             }
 
-            public int getDocumentRange(PointerByReference range) {
+            @Override
+			public int getDocumentRange(PointerByReference range) {
                 Function f = Function.getFunction(vTable[7], Function.ALT_CONVENTION);
                 return f.invokeInt(new Object[]{interfacePointer, range});
             }
