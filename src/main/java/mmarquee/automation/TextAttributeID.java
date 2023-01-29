@@ -16,16 +16,16 @@
 package mmarquee.automation;
 
 /**
- * Enumeration for the control-type.
+ * Enumeration for text attributes.
  *
  * @author Thorsten Fischer
  * Date 25/01/2023.
  *
- * Text types - see https://learn.microsoft.com/en-us/windows/win32/winauto/uiauto-textattribute-ids
+ * Text Attribute IDs - see https://learn.microsoft.com/en-us/windows/win32/winauto/uiauto-textattribute-ids
  */
-public enum TextType {
+public enum TextAttributeID {
     /**
-     * No text type.
+     * No text attribute.
      */
     None(0),
     
@@ -131,22 +131,22 @@ public enum TextType {
     }
 
     /**
-     * Constructor for the TextType.
+     * Constructor for the TextAttributeID.
      *
      * @param inValue The initial value.
      */
-    TextType(final int inValue) {
+    TextAttributeID(final int inValue) {
         this.value = inValue;
     }
 
     /**
-     * Gets the text type from the value.
-     * @param textTypeValue The value
-     * @return The control type
+     * Gets the text attribute from the value.
+     * @param textAttributeValue The value
+     * @return The text attribute
      */
-	public static TextType fromValue(int textTypeValue) {
-		for (TextType type: values()) {
-			if (type.getValue() == textTypeValue) {
+	public static TextAttributeID fromValue(int textAttributeValue) {
+		for (TextAttributeID type: values()) {
+			if (type.getValue() == textAttributeValue) {
 				return type;
 			}
 		}
