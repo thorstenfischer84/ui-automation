@@ -21,6 +21,8 @@ import com.sun.jna.platform.win32.Guid;
 import com.sun.jna.platform.win32.WinNT;
 import com.sun.jna.ptr.PointerByReference;
 
+import mmarquee.automation.TextUnit;
+
 /**
  * @author Mark Humphreys
  * Date 05/06/2017.
@@ -29,8 +31,7 @@ public class IUIAutomationTextRangeConverter {
     private static int METHODS = 21; // 0-2 IUnknown,
                                      // 3-20 IUIAutomationTextRange
 
-    public static IUIAutomationTextRange pointerToInterface(
-            final PointerByReference ptr) {
+    public static IUIAutomationTextRange pointerToInterface(final PointerByReference ptr) {
         final Pointer interfacePointer = ptr.getValue();
         final Pointer vTablePointer = interfacePointer.getPointer(0);
         final Pointer[] vTable = new Pointer[METHODS];
@@ -39,39 +40,51 @@ public class IUIAutomationTextRangeConverter {
             // IUnknown
 
             @Override
-            public WinNT.HRESULT QueryInterface(Guid.REFIID byValue,
-                                                PointerByReference pbr) {
-                Function f = Function.getFunction(vTable[0],
-                        Function.ALT_CONVENTION);
-                return new WinNT.HRESULT(
-                        f.invokeInt(
-                                new Object[]{interfacePointer,
-                                        byValue, pbr}));
+            public WinNT.HRESULT QueryInterface(Guid.REFIID byValue, PointerByReference pbr) {
+                Function f = Function.getFunction(vTable[0], Function.ALT_CONVENTION);
+                int res = f.invokeInt(new Object[]{interfacePointer, byValue, pbr});
+				return new WinNT.HRESULT(res);
             }
 
             @Override
             public int AddRef() {
-                Function f = Function.getFunction(vTable[1],
-                        Function.ALT_CONVENTION);
+                Function f = Function.getFunction(vTable[1], Function.ALT_CONVENTION);
                 return f.invokeInt(new Object[]{interfacePointer});
             }
 
-            public int Release() {
-                Function f = Function.getFunction(vTable[2],
-                        Function.ALT_CONVENTION);
+            @Override
+			public int Release() {
+                Function f = Function.getFunction(vTable[2], Function.ALT_CONVENTION);
                 return f.invokeInt(new Object[]{interfacePointer});
             }
-
-            public int getText(Integer maxLength, PointerByReference sr) {
-                Function f = Function.getFunction(vTable[12],
-                        Function.ALT_CONVENTION);
-                return f.invokeInt(
-                        new Object[]{interfacePointer, maxLength, sr});
+            
+            @Override
+            public int expandToEnclosingUnit(PointerByReference pbr) {
+                Function f = Function.getFunction(vTable[6], Function.ALT_CONVENTION);
+                return f.invokeInt(new Object[]{interfacePointer, Integer.valueOf(1)});
+            }
+            
+            @Override
+            public int getEnclosingElement(PointerByReference pbr) {
+                Function f = Function.getFunction(vTable[11], Function.ALT_CONVENTION);
+                return f.invokeInt(new Object[]{interfacePointer, pbr});
             }
 
-            public int select() {
-                Function f = Function.getFunction(vTable[16],
-                        Function.ALT_CONVENTION);
+            @Override
+			public int getText(Integer maxLength, PointerByReference sr) {
+                Function f = Function.getFunction(vTable[12], Function.ALT_CONVENTION);
+                return f.invokeInt(new Object[]{interfacePointer, maxLength, sr});
+            }
+            
+            @Override
+			public int move(TextUnit textUnit, Integer count, PointerByReference pbr) {
+                Function f = Function.getFunction(vTable[13], Function.ALT_CONVENTION);
+                return f.invokeInt(new Object[]{interfacePointer, textUnit.getValue(), count, pbr});
+            }
+
+            @Override
+			public int select() {
+                Function f = Function.getFunction(vTable[16], Function.ALT_CONVENTION);
                 return f.invokeInt(new Object[]{interfacePointer});
             }
         };

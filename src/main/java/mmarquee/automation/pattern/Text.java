@@ -15,17 +15,24 @@
  */
 package mmarquee.automation.pattern;
 
-import com.sun.jna.platform.win32.COM.COMUtils;
-import com.sun.jna.platform.win32.COM.Unknown;
 import com.sun.jna.platform.win32.Guid;
 import com.sun.jna.platform.win32.WinNT;
+import com.sun.jna.platform.win32.COM.COMUtils;
+import com.sun.jna.platform.win32.COM.Unknown;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
+
 import mmarquee.automation.AutomationException;
 import mmarquee.automation.Element;
 import mmarquee.automation.PatternID;
 import mmarquee.automation.PropertyID;
-import mmarquee.uiautomation.*;
+import mmarquee.automation.TextUnit;
+import mmarquee.uiautomation.IUIAutomationTextPattern;
+import mmarquee.uiautomation.IUIAutomationTextPatternConverter;
+import mmarquee.uiautomation.IUIAutomationTextRange;
+import mmarquee.uiautomation.IUIAutomationTextRangeArray;
+import mmarquee.uiautomation.IUIAutomationTextRangeArrayConverter;
+import mmarquee.uiautomation.IUIAutomationTextRangeConverter;
 
 /**
  * Wrapper for the text pattern.
@@ -63,28 +70,7 @@ public class Text extends BasePattern {
     private IUIAutomationTextPattern getPattern() throws AutomationException {
     	return getPattern(rawPattern, this::convertPointerOfTextPatternToInterface);
     }
-    /**
-     * Converts the raw pointer to interface.
-     *
-     * @param pUnknownA The raw pointer
-     * @return The converted interface
-     */
-    IUIAutomationTextPattern convertPointerOfTextPatternToInterface(
-            final PointerByReference pUnknownA) {
-        return IUIAutomationTextPatternConverter.pointerToInterface(pUnknownA);
-    }
-
-    /**
-     * Converts the raw pointer to array interface.
-     *
-     * @param pUnknownA The raw pointer
-     * @return The converted interface
-     */
-    IUIAutomationTextRangeArray convertPointerToArrayInterface(
-            final PointerByReference pUnknownA) {
-        return IUIAutomationTextRangeArrayConverter.pointerToInterface(pUnknownA);
-    }
-
+    
     /**
      * Gets the selection.
      *
@@ -106,8 +92,7 @@ public class Text extends BasePattern {
 
         WinNT.HRESULT resultA = unkConditionA.QueryInterface(new Guid.REFIID(IUIAutomationTextRangeArray.IID), pUnknownA);
         if (COMUtils.SUCCEEDED(resultA)) {
-            IUIAutomationTextRangeArray selection =
-                    convertPointerToArrayInterface(pUnknownA);
+            IUIAutomationTextRangeArray selection = convertPointerToArrayInterface(pUnknownA);
 
             // OK, now what?
             IntByReference ibr = new IntByReference();
@@ -131,8 +116,7 @@ public class Text extends BasePattern {
 
                 WinNT.HRESULT result = unknown.QueryInterface(new Guid.REFIID(IUIAutomationTextRange.IID), pUnknown);
                 if (COMUtils.SUCCEEDED(result)) {
-                    IUIAutomationTextRange range =
-                            convertPointerToInterface(pUnknown);
+                    IUIAutomationTextRange range = convertPointerToInterface(pUnknown);
 
                     PointerByReference sr = new PointerByReference();
 
@@ -186,6 +170,91 @@ public class Text extends BasePattern {
             throw new AutomationException(resultA.intValue());
         }
     }
+    
+    public int move(TextUnit textUnit, int count) throws AutomationException {
+        PointerByReference pbr = new PointerByReference();
+
+        final int res = this.getPattern().getDocumentRange(pbr);
+        if (res != 0) {
+            throw new AutomationException(res);
+        }
+        
+        Unknown unkConditionA = makeUnknown(pbr.getValue());
+        PointerByReference pUnknownA = new PointerByReference();
+
+        WinNT.HRESULT resultA = unkConditionA.QueryInterface(new Guid.REFIID(IUIAutomationTextRange.IID), pUnknownA);
+        if (COMUtils.SUCCEEDED(resultA)) {
+            IUIAutomationTextRange textRange = convertPointerToInterface(pUnknownA);
+
+            PointerByReference elementResult = new PointerByReference();
+
+            final int res1 = textRange.move(textUnit, count, elementResult);
+            if (res1 != 0) {
+                throw new AutomationException(res1);
+            }
+            
+            return res1;
+        } else {
+            throw new AutomationException(resultA.intValue());
+        }
+    }
+    
+    public int expandToEnclosingUnit() throws AutomationException {
+        PointerByReference pbr = new PointerByReference();
+
+        final int res = this.getPattern().getDocumentRange(pbr);
+        if (res != 0) {
+            throw new AutomationException(res);
+        }
+        
+        Unknown unkConditionA = makeUnknown(pbr.getValue());
+        PointerByReference pUnknownA = new PointerByReference();
+
+        WinNT.HRESULT resultA = unkConditionA.QueryInterface(new Guid.REFIID(IUIAutomationTextRange.IID), pUnknownA);
+        if (COMUtils.SUCCEEDED(resultA)) {
+            IUIAutomationTextRange textRange = convertPointerToInterface(pUnknownA);
+
+            PointerByReference elementResult = new PointerByReference();
+
+            final int res1 = textRange.expandToEnclosingUnit(elementResult);
+            if (res1 != 0) {
+                throw new AutomationException(res1);
+            }
+            
+            return res1;
+        } else {
+            throw new AutomationException(resultA.intValue());
+        }
+    }
+    
+
+    public Element getEnclosingElement() throws AutomationException {
+        PointerByReference pbr = new PointerByReference();
+        
+        final int res = this.getPattern().getDocumentRange(pbr);
+        if (res != 0) {
+            throw new AutomationException(res);
+        }
+
+        Unknown unkConditionA = makeUnknown(pbr.getValue());
+        PointerByReference pUnknownA = new PointerByReference();
+
+        WinNT.HRESULT resultA = unkConditionA.QueryInterface(new Guid.REFIID(IUIAutomationTextRange.IID), pUnknownA);
+        if (COMUtils.SUCCEEDED(resultA)) {
+            IUIAutomationTextRange textRange = convertPointerToInterface(pUnknownA);
+
+            PointerByReference elementResult = new PointerByReference();
+
+            final int res1 = textRange.getEnclosingElement(elementResult);
+            if (res1 != 0) {
+                throw new AutomationException(res1);
+            }
+            
+            return new Element(getAutomationElementFromReference(pbr));
+        } else {
+            throw new AutomationException(resultA.intValue());
+        }
+    }
 
     /**
      * Converts the pointer to the interface.
@@ -193,8 +262,28 @@ public class Text extends BasePattern {
      * @param pUnknownA The raw pointer
      * @return Error in automation library
      */
-    IUIAutomationTextRange convertPointerToInterface(
-                final PointerByReference pUnknownA) {
+    IUIAutomationTextRange convertPointerToInterface(final PointerByReference pUnknownA) {
         return IUIAutomationTextRangeConverter.pointerToInterface(pUnknownA);
+    }
+    
+
+    /**
+     * Converts the raw pointer to the array interface.
+     *
+     * @param pUnknownA The raw pointer
+     * @return The converted interface
+     */
+    IUIAutomationTextRangeArray convertPointerToArrayInterface(final PointerByReference pUnknownA) {
+        return IUIAutomationTextRangeArrayConverter.pointerToInterface(pUnknownA);
+    }
+    
+    /**
+     * Converts the raw pointer to the interface.
+     *
+     * @param pUnknownA The raw pointer
+     * @return The converted interface
+     */
+    IUIAutomationTextPattern convertPointerOfTextPatternToInterface(final PointerByReference pUnknownA) {
+    	return IUIAutomationTextPatternConverter.pointerToInterface(pUnknownA);
     }
 }

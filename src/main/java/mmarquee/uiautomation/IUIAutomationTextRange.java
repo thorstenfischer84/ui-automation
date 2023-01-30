@@ -15,9 +15,11 @@
  */
 package mmarquee.uiautomation;
 
-import com.sun.jna.platform.win32.COM.IUnknown;
 import com.sun.jna.platform.win32.Guid;
+import com.sun.jna.platform.win32.COM.IUnknown;
 import com.sun.jna.ptr.PointerByReference;
+
+import mmarquee.automation.TextUnit;
 
 /**
  * @author Mark Humphreys
@@ -30,5 +32,8 @@ public interface IUIAutomationTextRange extends IUnknown {
     Guid.IID IID = new Guid.IID("{A543CC6A-F4AE-494B-8239-C814481187A8}");
 
     int select();
+    int expandToEnclosingUnit(PointerByReference pbr);
+    int getEnclosingElement(PointerByReference pbr);
     int getText(Integer maxLength, PointerByReference sr);
+    int move(TextUnit textUnit, Integer count, PointerByReference pbr);
 }
