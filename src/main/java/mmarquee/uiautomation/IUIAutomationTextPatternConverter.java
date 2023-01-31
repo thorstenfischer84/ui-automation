@@ -53,6 +53,18 @@ public class IUIAutomationTextPatternConverter {
                 Function f = Function.getFunction(vTable[2], Function.ALT_CONVENTION);
                 return f.invokeInt(new Object[]{interfacePointer});
             }
+            
+//            @Override
+//			public int rangeFromPoint(int point, PointerByReference textRange) {
+//                Function f = Function.getFunction(vTable[3], Function.ALT_CONVENTION);
+//                return f.invokeInt(new Object[]{interfacePointer, point, textRange});
+//            }
+//            
+//            @Override
+//			public int rangeFromChild(IUIAutomationElement automationElement, PointerByReference textRange) {
+//                Function f = Function.getFunction(vTable[4], Function.ALT_CONVENTION);
+//                return f.invokeInt(new Object[]{interfacePointer, automationElement, textRange});
+//            }
 
             @Override
 			public int getSelection(PointerByReference result) {
@@ -70,6 +82,12 @@ public class IUIAutomationTextPatternConverter {
 			public int getDocumentRange(PointerByReference range) {
                 Function f = Function.getFunction(vTable[7], Function.ALT_CONVENTION);
                 return f.invokeInt(new Object[]{interfacePointer, range});
+            }
+            
+            @Override
+			public int getSupportedTextSelection(int supportedTextSelection) {
+                Function f = Function.getFunction(vTable[8], Function.ALT_CONVENTION);
+                return f.invokeInt(new Object[]{interfacePointer, supportedTextSelection});
             }
         };
     }

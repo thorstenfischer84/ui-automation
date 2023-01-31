@@ -17,8 +17,11 @@ package mmarquee.uiautomation;
 
 import com.sun.jna.platform.win32.Guid;
 import com.sun.jna.platform.win32.COM.IUnknown;
+import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
+import mmarquee.automation.TextAttributeID;
+import mmarquee.automation.TextPatternRangeEndpoint;
 import mmarquee.automation.TextUnit;
 
 /**
@@ -31,9 +34,22 @@ public interface IUIAutomationTextRange extends IUnknown {
      */
     Guid.IID IID = new Guid.IID("{A543CC6A-F4AE-494B-8239-C814481187A8}");
 
+    int cloneText(PointerByReference clonedRange);
+    int compare(PointerByReference range, IntByReference areSame);
+    int compareEndpoints(TextPatternRangeEndpoint srcEndPoint, PointerByReference range, TextPatternRangeEndpoint targetEndPoint, IntByReference compValue);
+    int expandToEnclosingUnit(TextUnit textUnit);
+    int findAttribute(int attr, int val, boolean backward, PointerByReference found);
+    int findText(String text, boolean backward, boolean ignoreCase, PointerByReference found);
+    int getAttributeValue(TextAttributeID attr, PointerByReference value);
+    int getBoundingRectangles(PointerByReference boundingRects);
+    int getEnclosingElement(PointerByReference enclosingElement);
+    int getText(Integer maxLength, PointerByReference text);
+    int move(TextUnit textUnit, Integer count, IntByReference moved);
+    int moveEndpointByUnit(TextPatternRangeEndpoint endpoint, TextUnit textUnit, int count, PointerByReference moved);
+    int moveEndpointByRange(TextPatternRangeEndpoint srcEndPoint, PointerByReference range, TextPatternRangeEndpoint targetEndpoint);
     int select();
-    int expandToEnclosingUnit(PointerByReference pbr);
-    int getEnclosingElement(PointerByReference pbr);
-    int getText(Integer maxLength, PointerByReference sr);
-    int move(TextUnit textUnit, Integer count, PointerByReference pbr);
+    int addToSelection();
+    int removeFromSelection();
+    int scrollIntoView(boolean alignToTop);
+    int getChildren(PointerByReference children);
 }
