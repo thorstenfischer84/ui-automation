@@ -15,15 +15,16 @@
  */
 package mmarquee.automation.controls;
 
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
+
+import org.junit.Test;
+import org.mockito.Mockito;
+
 import mmarquee.automation.Element;
 import mmarquee.automation.UIAutomation;
 import mmarquee.automation.pattern.Text;
 import mmarquee.uiautomation.IUIAutomation;
-import org.junit.Test;
-import org.mockito.Mockito;
-
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
 
 /**
  * @author Mark Humphreys
@@ -78,7 +79,7 @@ public class DocumentTest {
         Text pattern = Mockito.mock(Text.class);
 
         when(pattern.isAvailable()).thenReturn(true);
-        when(pattern.getText()).thenReturn("NAME");
+        when(pattern.getDocumentText()).thenReturn("NAME");
 
         IUIAutomation mocked_automation = Mockito.mock(IUIAutomation.class);
         UIAutomation instance = new UIAutomation(mocked_automation);

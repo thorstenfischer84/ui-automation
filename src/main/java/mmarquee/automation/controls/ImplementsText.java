@@ -33,7 +33,7 @@ public interface ImplementsText extends Automatable, CanRequestBasePattern {
     default public String getText() throws AutomationException, PatternNotFoundException {
 		final Text textPattern = requestAutomationPattern(Text.class);
 		if (textPattern.isAvailable()) {
-			return textPattern.getText();
+			return textPattern.getDocumentText();
 		}
 		throw new PatternNotFoundException("Cannot get text");
     }

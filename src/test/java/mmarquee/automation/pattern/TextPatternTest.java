@@ -74,7 +74,7 @@ public class TextPatternTest {
         Text pattern = new Text(element);
         pattern.rawPattern = rawPattern;
 
-        String text = pattern.getText();
+        String text = pattern.getDocumentText();
 
         assertTrue(text.equals(""));
     }
@@ -127,7 +127,7 @@ public class TextPatternTest {
 
         doReturn(mockRangeArray)
                 .when(spyPattern)
-                .convertPointerToArrayInterface(any());
+                .convertPointerToTextRangeArrayInterface(any());
 
         String text = spyPattern.getSelection();
 
@@ -178,11 +178,11 @@ public class TextPatternTest {
 
         doReturn(mockRange)
                 .when(spyPattern)
-                .convertPointerToInterface(any());
+                .convertPointerToTextRangeInterface(any());
 
         doReturn(mockRangeArray)
                 .when(spyPattern)
-                .convertPointerToArrayInterface(any());
+                .convertPointerToTextRangeArrayInterface(any());
 
         String text = spyPattern.getSelection();
 
@@ -205,7 +205,7 @@ public class TextPatternTest {
 
         IUIAutomationTextRange mockRange = Mockito.mock(IUIAutomationTextRange.class);
 
-        String text = spyPattern.getText();
+        String text = spyPattern.getDocumentText();
 
         assertTrue(text.equals(""));
     }
@@ -246,9 +246,9 @@ public class TextPatternTest {
 
         doReturn(mockRange)
                 .when(spyPattern)
-                .convertPointerToInterface(any());
+                .convertPointerToTextRangeInterface(any());
 
-        String text = spyPattern.getText();
+        String text = spyPattern.getDocumentText();
 
         assertTrue(text.equals("Hello"));
     }
@@ -275,9 +275,9 @@ public class TextPatternTest {
 
         doReturn(mockRange)
                 .when(spyPattern)
-                .convertPointerToInterface(any());
+                .convertPointerToTextRangeInterface(any());
 
-        String text = spyPattern.getText();
+        String text = spyPattern.getDocumentText();
 
         assertTrue(text.equals(""));
     }
